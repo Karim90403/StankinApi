@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express');
 const app = express.Router();
 const axios = require('axios');
-const fs = require('fs');
 
 app.post("/getToken", async (req, res) => {
     try {
@@ -17,6 +16,46 @@ app.post("/getToken", async (req, res) => {
         console.log(err);
     }
 
+})
+
+app.post("/autorisation", async (req, res) => {
+    try {
+        res.status(200).json({
+            token: req.body.login,
+            message: "this is not true token"
+        })
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+app.post("/registration", async (req, res) => {
+    try {
+        res.status(200).json({
+            token: req.body.login,
+            message: "this is not true token"
+        })
+    } catch (err) {
+        res.status(200).json({ error: err.message });
+    }
+})
+
+app.get("/getGroups", async (req, res) => {
+    try {
+        response = await axios.get("https://api.stbot.sdore.me/schedule/groups/")
+        res.status(200).json({ grous: response.data})
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+app.get("/getLecturers", async (req, res) => {
+    try {
+        response = await axios.get("https://api.stbot.sdore.me/schedule/lecturer/")
+        res.status(200).json({ grous: response.data})
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 })
 
 module.exports = app

@@ -43,7 +43,7 @@ app.post("/registration", async (req, res) => {
 app.get("/getGroups", async (req, res) => {
     try {
         response = await axios.get("https://api.stbot.sdore.me/schedule/groups/")
-        res.status(200).json({ grous: response.data})
+        res.status(200).json( response.data )
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -51,8 +51,18 @@ app.get("/getGroups", async (req, res) => {
 
 app.get("/getLecturers", async (req, res) => {
     try {
-        response = await axios.get("https://api.stbot.sdore.me/schedule/lecturer/")
-        res.status(200).json({ grous: response.data})
+        response = await axios.get("https://api.stbot.sdore.me/lecturer/")
+        res.status(200).json( response.data )
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+app.post("/getData", async (req, res) => {
+    console.log(req.body.url);
+    try {
+        response = await axios.get(`${req.body.url}`)
+        res.status(200).json( response.data )
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

@@ -13,7 +13,6 @@ app.post("/getToken", async (req, res) => {
         res.status(200).json(reqest.data)
     } catch (err) {
         res.status(400).json({ error: err.message });
-        console.log(err);
     }
 
 })
@@ -59,9 +58,30 @@ app.get("/getLecturers", async (req, res) => {
 })
 
 app.post("/getData", async (req, res) => {
-    console.log(req.body.url);
     try {
         response = await axios.get(`${req.body.url}`)
+        res.status(200).json( response.data )
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+app.post("/getSemesters", async (req, res) => {
+    try {
+        response = await axios.get("https://lk.stankin.ru/webapi/api3/student/semesters", {
+            headers: { Authorization: 'Bearer ' + eval(req.body.token) }
+        })
+        res.status(200).json( response.data )
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
+app.post("/getModules", async (req, res) => {
+    try {
+        response = await axios.get(`https://lk.stankin.ru/webapi/api3/student/marks?sem=${eval(req.body.semester)}`, {
+            headers: { Authorization: 'Bearer ' + eval(req.body.token) }
+        })
         res.status(200).json( response.data )
     } catch (err) {
         res.status(400).json({ error: err.message });

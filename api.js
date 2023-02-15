@@ -79,7 +79,7 @@ app.post("/getSemesters", async (req, res) => {
 
 app.post("/getModules", async (req, res) => {
     try {
-        response = await axios.get(`https://lk.stankin.ru/webapi/api3/student/marks?sem=${eval(req.body.semester)}`, {
+        response = await axios.get(`https://lk.stankin.ru/webapi/api3/student/marks?sem=${req.body.semester}`, {
             headers: { Authorization: 'Bearer ' + eval(req.body.token) }
         })
         res.status(200).json( response.data )

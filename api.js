@@ -3,6 +3,15 @@ const express = require('express');
 const app = express.Router();
 const axios = require('axios');
 
+const Pool = require('pg').Pool
+const pool = new Pool({
+    user: 'karim',
+    password: 's1mpleP@s5',
+    host: '194.67.206.53',
+    port: 5432,
+    database: 'prof_assistant'
+})
+
 app.post("/getToken", async (req, res) => {
     try {
         const reqParams = new URLSearchParams();
@@ -85,6 +94,25 @@ app.post("/getModules", async (req, res) => {
         res.status(200).json( response.data )
     } catch (err) {
         res.status(400).json({ error: err.message });
+    }
+})
+
+app.post("/getTimetable", (req, res) => {
+    if(req.body.isLecturer){
+        pool.query('SELECT * FROM schedule WHERE start_time < $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(req.body.date).getDate() + 1, req.body.lecturer], (error, results) => {
+            if (error) {
+                res.status(400).json({ error: error.message })
+            }
+            res.status(200).json(results)
+        })
+    }
+    else{
+        pool.query('SELECT * FROM schedule WHERE start_time < $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(req.body.date).getDate() + 1, req.body.group], (error, results) => {
+            if (error) {
+                res.status(400).json({ error: error.message })
+            }
+            res.status(200).json(results)
+        })
     }
 })
 

@@ -98,8 +98,10 @@ app.post("/getModules", async (req, res) => {
 })
 
 app.post("/getTimetable", (req, res) => {
+    var tomorrow = new Date(req.body.date)
+    tomorrow.setDate(tomorrow.getDate() +1)
     if(req.body.isLecturer){
-        pool.query('SELECT * FROM schedule WHERE start_time < $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(req.body.date).getDate() + 1, req.body.lecturer], (error, results) => {
+        pool.query('SELECT * FROM schedule WHERE start_time > $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(tomorrow), req.body.lecturer], (error, results) => {
             if (error) {
                 res.status(400).json({ error: error.message })
             }
@@ -107,7 +109,7 @@ app.post("/getTimetable", (req, res) => {
         })
     }
     else{
-        pool.query('SELECT * FROM schedule WHERE start_time < $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(req.body.date).getDate() + 1, req.body.group], (error, results) => {
+        pool.query('SELECT * FROM schedule WHERE start_time > $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(tomorrow), req.body.group], (error, results) => {
             if (error) {
                 res.status(400).json({ error: error.message })
             }

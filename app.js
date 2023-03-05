@@ -13,7 +13,7 @@ app.use(cors())
 app.use(helmet())
 
 app.use("/api", api)
-app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, "dist")))
 
 app.listen(process.env.PORT, () => {
     console.log(`App ran at ${process.env.PORT}`)

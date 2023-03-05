@@ -26,53 +26,32 @@ app.post("/getToken", async (req, res) => {
 
 })
 
-app.post("/autorisation", async (req, res) => {
-    try {
-        res.status(200).json({
-            token: req.body.login,
-            message: "this is not true token"
+app.get("/getLecturers", async (req, res) => {
+    let lecturers = []
+    pool.query('SELECT DISTINCT professor FROM schedule;', (error, results) => {
+        if (error) {
+            res.status(400).json({ error: error.message })
+        }
+        results.rows.forEach( (lecturer) => {
+            lecturers.push(lecturer.professor)
         })
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-})
-
-app.post("/registration", async (req, res) => {
-    try {
-        res.status(200).json({
-            token: req.body.login,
-            message: "this is not true token"
-        })
-    } catch (err) {
-        res.status(200).json({ error: err.message });
-    }
+        lecturers.sort()
+        res.status(200).json(lecturers)
+    })
 })
 
 app.get("/getGroups", async (req, res) => {
-    try {
-        response = await axios.get("https://api.stbot.sdore.me/schedule/groups/")
-        res.status(200).json( response.data )
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-})
-
-app.get("/getLecturers", async (req, res) => {
-    try {
-        response = await axios.get("https://api.stbot.sdore.me/lecturer/")
-        res.status(200).json( response.data )
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-})
-
-app.post("/getData", async (req, res) => {
-    try {
-        response = await axios.get(`${req.body.url}`)
-        res.status(200).json( response.data )
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+    let groups = []
+    pool.query('SELECT DISTINCT group_name FROM schedule;', (error, results) => {
+        if (error) {
+            res.status(400).json({ error: error.message })
+        }
+        results.rows.forEach( (group) => {
+            groups.push(group.group_name)
+        })
+        groups.sort()
+        res.status(200).json(groups)
+    })
 })
 
 app.post("/getSemesters", async (req, res) => {
@@ -98,10 +77,10 @@ app.post("/getModules", async (req, res) => {
 })
 
 app.post("/getTimetable", (req, res) => {
-    var tomorrow = new Date(req.body.date)
+    let tomorrow = new Date(req.body.date)
     tomorrow.setDate(tomorrow.getDate() +1)
     if(req.body.isLecturer){
-        pool.query('SELECT * FROM schedule WHERE start_time > $1 AND end_time < $2 AND group_name = $3', [new Date(req.body.date), new Date(tomorrow), req.body.lecturer], (error, results) => {
+        pool.query('SELECT * FROM schedule WHERE start_time > $1 AND end_time < $2 AND professor = $3', [new Date(req.body.date), new Date(tomorrow), req.body.lecturer], (error, results) => {
             if (error) {
                 res.status(400).json({ error: error.message })
             }

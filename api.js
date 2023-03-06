@@ -82,7 +82,7 @@ app.post("/getTimetable", (req, res) => {
             if (error) {
                 res.status(400).json({ error: error.message })
             }
-            res.status(200).json(results)
+            res.status(200).json(results.rows.sort((a, b) =>a.start_time.getTime()-b.start_time.getTime()))
         })
     }
     else{
@@ -90,7 +90,7 @@ app.post("/getTimetable", (req, res) => {
             if (error) {
                 res.status(400).json({ error: error.message })
             }
-            res.status(200).json(results)
+            res.status(200).json(results.rows.sort((a, b) =>a.start_time.getTime()-b.start_time.getTime()))
         })
     }
 })

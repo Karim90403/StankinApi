@@ -35,8 +35,7 @@ app.get("/getLecturers", async (req, res) => {
         results.rows.forEach( (lecturer) => {
             lecturers.push(lecturer.professor)
         })
-        lecturers.sort()
-        res.status(200).json(lecturers)
+        res.status(200).json(lecturers.sort())
     })
 })
 
@@ -49,8 +48,7 @@ app.get("/getGroups", async (req, res) => {
         results.rows.forEach( (group) => {
             groups.push(group.group_name)
         })
-        groups.sort()
-        res.status(200).json(groups)
+        res.status(200).json(groups.sort())
     })
 })
 

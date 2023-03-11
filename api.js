@@ -6,7 +6,7 @@ const axios = require('axios');
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'karim',
-    password: 's1mpleP@s5',
+    password: process.env.password,
     host: '194.67.206.53',
     port: 5432,
     database: 'prof_assistant'
